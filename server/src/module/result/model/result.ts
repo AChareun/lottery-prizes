@@ -24,7 +24,7 @@ export interface IResultAttributes {
     pos20: number | null;
     createdAt: Date;
     updatedAt: Date;
-    deletedAt: Date;
+    deletedAt: Date | null;
 }
 
 export interface IResultCreationAttributes extends Partial<IResultAttributes> {}
@@ -56,7 +56,7 @@ export class ResultModel
 
     createdAt!: Date;
     updatedAt!: Date;
-    deletedAt!: Date;
+    deletedAt!: Date | null;
 
     static async setup(sequelizeInstance: Sequelize): Promise<typeof ResultModel> {
         ResultModel.init(
@@ -134,7 +134,7 @@ export class ResultModel
                 },
                 deletedAt: {
                     type: DataTypes.DATE,
-                    allowNull: false,
+                    allowNull: true,
                 },
                 updatedAt: {
                     type: DataTypes.DATE,
