@@ -31,7 +31,7 @@ beforeEach(
  */
 
 test('Trying to get a non-existing registry throws a specific error', async () => {
-    const now = new Date().toString()
+    const now = new Date();
     try {
         await testRepo.getByDate(now);
     } catch (error) {
@@ -44,7 +44,7 @@ test('addRegistry method adds a new result and auto-increments id', async () => 
     const newResult = await testRepo.addRegistry(fakeResultData);
 
     expect(newResult.id).toEqual(1);
-})
+});
 
 test('Failing to add a registry throws a specific error', async () => {
     const wrongData = null;
@@ -54,14 +54,14 @@ test('Failing to add a registry throws a specific error', async () => {
     } catch (e) {
         expect(e).toBeInstanceOf(GenericDatabaseError);
     }
-})
+});
 
 test('A registry can be obtained by using getByDate method', async () => {
-    const now = new Date();
+    const today = new Date(new Date().toString());
     const fakeResultData = {};
 
-    const newResult = await testRepo.addRegistry(fakeResultData);
-    const retrievedResult = await testRepo.getByDate(now.toString());
+    await testRepo.addRegistry(fakeResultData);
+    const retrievedResult = await testRepo.getByDate(new Date(today));
 
     expect(retrievedResult[0].id).toEqual(1);
 });

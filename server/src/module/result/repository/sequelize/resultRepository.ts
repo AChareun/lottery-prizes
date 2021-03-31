@@ -14,15 +14,13 @@ export class ResultRepository implements IResultRepository {
         this.resultModel = resultModel;
     }
 
-    async getByDate(date: string): Promise<Result[]> {
-        const actualDate = new Date(date);
-
+    async getByDate(date: Date): Promise<Result[]> {
         let result: ResultModel[] | undefined;
         try {
             result = await this.resultModel.findAll({
                 where: {
                     createdAt: {
-                        [Op.gt]: actualDate,
+                        [Op.gt]: date,
                     },
                 },
             });
