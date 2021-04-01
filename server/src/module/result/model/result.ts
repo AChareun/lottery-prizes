@@ -58,7 +58,7 @@ export class ResultModel
     updatedAt!: Date;
     deletedAt!: Date | null;
 
-    static async setup(sequelizeInstance: Sequelize): Promise<typeof ResultModel> {
+    static setup(sequelizeInstance: Sequelize): typeof ResultModel {
         ResultModel.init(
             {
                 id: {
