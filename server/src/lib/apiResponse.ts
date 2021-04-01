@@ -1,4 +1,4 @@
-import { ApiErrors } from '../core/apiError';
+import { IApiError } from '../core/apiError';
 
 export interface IApiResponse {
     status: string;
@@ -8,9 +8,9 @@ export interface IApiResponse {
 }
 
 export class ApiResponseHelper {
-    apiErrors: Error[];
+    apiErrors: { [name: string]: IApiError };
 
-    constructor(apiErrors: Error[]) {
+    constructor(apiErrors: { [name: string]: IApiError }) {
         this.apiErrors = apiErrors;
     }
 
@@ -24,7 +24,7 @@ export class ApiResponseHelper {
     }
 
     buildErrorResponse(errorName: string): IApiResponse {
-        const apiError = ApiErrors[errorName];
+        const apiError = this.apiErrors[errorName];
 
         return {
             status: 'ERROR',
