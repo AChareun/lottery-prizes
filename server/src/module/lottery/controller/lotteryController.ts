@@ -1,15 +1,15 @@
-import { ResultService } from '../service/resultService';
+import { LotteryService } from '../service/lotteryService';
 import { ApiResponseHelper } from '../../../lib/apiResponse';
 import { Application, Request, Response } from 'express';
 import { isValidDate } from '../../../lib/dateHelpers';
 
-export class ResultController {
-    BASE_ROUTE = '/result'
-    resultService: ResultService;
+export class LotteryController {
+    BASE_ROUTE = '/lottery'
+    lotteryService: LotteryService;
     responseHelper: ApiResponseHelper;
 
-    constructor(resultService: ResultService, responseHelper: ApiResponseHelper) {
-        this.resultService = resultService;
+    constructor(lotteryService: LotteryService, responseHelper: ApiResponseHelper) {
+        this.lotteryService = lotteryService;
         this.responseHelper = responseHelper;
     }
 
@@ -25,7 +25,7 @@ export class ResultController {
 
         if (typeof date === 'string' && isValidDate(new Date(date))) {
             try {
-                const results = await this.resultService.getByDate(date);
+                const results = await this.lotteryService.getByDate(date);
                 const response = this.responseHelper.buildOkResponse(results)
                 res.status(200).json(response);
 
@@ -47,7 +47,7 @@ export class ResultController {
     async postResults(req: Request, res: Response): Promise<void> {
         const results = req?.body?.results;
         try {
-            const newResults = await this.resultService.addResult(results)
+            const newResults = await this.lotteryService.addResult(results)
             const response = this.responseHelper.buildOkResponse(newResults);
             res.status(200).json(response);
         } catch (e) {

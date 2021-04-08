@@ -1,13 +1,13 @@
-import { ResultService } from '../resultService';
-import { IResultRepository } from '../../repository/resultRepositoryInterface';
+import { LotteryService } from '../lotteryService';
+import { ILotteryRepository } from '../../repository/lotteryRepositoryInterface';
 import { Result } from '../../entity/result';
-import { fromEntityToModel } from '../../mapper/resultMapper';
+import { fromEntityToModel } from '../../mapper/lotteryMapper';
 
-const mockRepo: IResultRepository = {
+const mockRepo: ILotteryRepository = {
     addRegistry: jest.fn(),
     getByDate: jest.fn(),
 }
-const testService: ResultService = new ResultService(mockRepo);
+const testService: LotteryService = new LotteryService(mockRepo);
 
 test('Service correctly calls repository methods with the right arguments', async () => {
     const stringDate = new Date().toString();

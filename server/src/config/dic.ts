@@ -4,11 +4,11 @@ import { Sequelize } from 'sequelize';
 import { ApiResponseHelper } from '../lib/apiResponse';
 import { ApiErrors } from '../core/apiError';
 import {
-    ResultController,
-    ResultService,
-    ResultRepository,
+    LotteryController,
+    LotteryService,
+    LotteryRepository,
     ResultModel,
-} from '../module/result/module';
+} from '../module/lottery/module';
 
 function configureSequelizeDatabase(): Sequelize {
     return new Sequelize({ dialect: 'sqlite', storage: process.env.DATABASE_URL });
@@ -25,13 +25,13 @@ function configureResultModel(container: DIContainer): typeof ResultModel {
     return ResultModel.setup(container.get<Sequelize>('Sequelize'));
 }
 
-function addResultModuleDefinitions(container: DIContainer): void {
+function addLotteryModuleDefinitions(container: DIContainer): void {
     container.addDefinitions({
         ResultModel: factory(configureResultModel),
-        ResultRepository: object(ResultRepository).construct(get('ResultModel')),
-        ResultService: object(ResultService).construct(get('ResultRepository')),
-        ResultController: object(ResultController).construct(
-            get('ResultService'),
+        LotteryRepository: object(LotteryRepository).construct(get('ResultModel')),
+        LotteryService: object(LotteryService).construct(get('LotteryRepository')),
+        LotteryController: object(LotteryController).construct(
+            get('LotteryService'),
             get('ResponseHelper')
         ),
     });
@@ -41,7 +41,7 @@ export function configureDI(): DIContainer {
     const container = new DIContainer();
 
     addCommonDefinitions(container);
-    addResultModuleDefinitions(container);
+    addLotteryModuleDefinitions(container);
 
     return container;
 }

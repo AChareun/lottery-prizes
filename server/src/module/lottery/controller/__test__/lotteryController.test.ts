@@ -1,5 +1,5 @@
-import { ResultService } from '../../service/resultService';
-import { ResultController } from '../resultController';
+import { LotteryService } from '../../service/lotteryService';
+import { LotteryController } from '../lotteryController';
 import { ApiResponseHelper } from '../../../../lib/apiResponse';
 
 const resMock = (() => {
@@ -12,8 +12,8 @@ const resMock = (() => {
     return res;
 })();
 
-const serviceMock: ResultService = {
-    resultRepository: {
+const serviceMock: LotteryService = {
+    lotteryRepository: {
         getByDate: jest.fn(),
         addRegistry: jest.fn(),
     },
@@ -22,12 +22,12 @@ const serviceMock: ResultService = {
 };
 
 const responseHelperMock: ApiResponseHelper = {
-    apiErrors: [],
+    apiErrors: {},
     buildErrorResponse: jest.fn(),
     buildOkResponse: jest.fn(),
 };
 
-const testController = new ResultController(serviceMock, responseHelperMock);
+const testController = new LotteryController(serviceMock, responseHelperMock);
 
 beforeEach((): void => {
     jest.clearAllMocks();

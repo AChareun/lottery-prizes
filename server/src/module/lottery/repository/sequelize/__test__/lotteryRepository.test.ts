@@ -2,20 +2,20 @@
  * TEST SETUP
  */
 import { Sequelize } from 'sequelize';
-import { ResultRepository } from '../resultRepository';
+import { LotteryRepository } from '../lotteryRepository';
 import { ResultModel } from '../../../model/result';
 import { ResourceNotFoundError } from '../../../../error/resourceNotFoundError';
 import { GenericDatabaseError } from '../../../../error/genericDatabaseError';
 
 const testSequelizeInstance = new Sequelize('sqlite::memory');
 
-let testRepo: ResultRepository;
+let testRepo: LotteryRepository;
 let resultModel: typeof ResultModel;
 
 beforeAll(
     async (): Promise<void> => {
         resultModel = await ResultModel.setup(testSequelizeInstance);
-        testRepo = new ResultRepository(resultModel);
+        testRepo = new LotteryRepository(resultModel);
     }
 );
 
@@ -39,7 +39,7 @@ test('Trying to get a non-existing registry throws a specific error', async () =
     }
 });
 
-test('addRegistry method adds a new result and auto-increments id', async () => {
+test('addRegistry method adds a new lottery and auto-increments id', async () => {
     const fakeResultData = {};
     const newResult = await testRepo.addRegistry(fakeResultData);
 

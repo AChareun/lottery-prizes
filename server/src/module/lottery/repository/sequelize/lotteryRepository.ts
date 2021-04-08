@@ -1,13 +1,13 @@
 import { DatabaseError, Op } from 'sequelize';
 
-import { IResultRepository } from '../resultRepositoryInterface';
+import { ILotteryRepository } from '../lotteryRepositoryInterface';
 import { Result } from '../../entity/result';
-import { IResultCreationAttributes, ResultModel } from '../../model/result';
-import { fromModelToEntity } from '../../mapper/resultMapper';
+import { IResultModelCreationAttributes, ResultModel } from '../../model/result';
+import { fromModelToEntity } from '../../mapper/lotteryMapper';
 import { ResourceNotFoundError } from '../../../error/resourceNotFoundError';
 import { GenericDatabaseError } from '../../../error/genericDatabaseError';
 
-export class ResultRepository implements IResultRepository {
+export class LotteryRepository implements ILotteryRepository {
     resultModel: typeof ResultModel;
 
     constructor(resultModel: typeof ResultModel) {
@@ -17,13 +17,7 @@ export class ResultRepository implements IResultRepository {
     async getByDate(date: Date): Promise<Result[]> {
         let result: ResultModel[] | undefined;
         try {
-            result = await this.resultModel.findAll({
-                where: {
-                    createdAt: {
-                        [Op.gt]: date,
-                    },
-                },
-            });
+            result = await this.resultModel.findAll();
         } catch (e) {
             if (e instanceof DatabaseError) {
                 console.log('DATABASE ERROR:', e.message);
@@ -41,7 +35,7 @@ export class ResultRepository implements IResultRepository {
         }
     }
 
-    async addRegistry(attributes: IResultCreationAttributes): Promise<Result> {
+    async addRegistry(attributes: IResultModelCreationAttributes): Promise<Result> {
         let newResult: ResultModel | undefined;
         try {
             newResult = await this.resultModel.create(attributes);
