@@ -1,5 +1,13 @@
-import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
+import {
+    Sequelize,
+    DataTypes,
+    Model,
+    Optional,
+    HasManyGetAssociationsMixin,
+    HasManyCountAssociationsMixin, HasManyAddAssociationMixin, HasManyCreateAssociationMixin
+} from 'sequelize';
 import { LotteryNameModel, LotteryTypeModel } from './enum';
+import { ResultModel } from './result';
 
 interface ILotteryModelAttributes {
     id: number | null;
@@ -8,7 +16,7 @@ interface ILotteryModelAttributes {
     date: Date;
 }
 
-interface ILotteryModelCreationAttributes extends Optional<ILotteryModelAttributes, 'id'> {}
+export interface ILotteryModelCreationAttributes extends Optional<ILotteryModelAttributes, 'id'> {}
 
 export class LotteryModel
     extends Model<ILotteryModelAttributes, ILotteryModelCreationAttributes>
@@ -21,6 +29,10 @@ export class LotteryModel
     createdAt!: Date;
     updatedAt!: Date;
     deletedAt!: Date;
+
+    getResults!: HasManyGetAssociationsMixin<ResultModel>;
+    createResult!: HasManyCreateAssociationMixin<ResultModel>;
+    countResults!: HasManyCountAssociationsMixin;
 
     static setup(sequelizeInstance: Sequelize): typeof LotteryModel {
         LotteryModel.init(
