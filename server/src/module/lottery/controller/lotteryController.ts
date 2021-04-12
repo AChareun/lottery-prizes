@@ -16,11 +16,11 @@ export class LotteryController {
     configureRoutes(app: Application): void {
         const { BASE_ROUTE } = this;
 
-        app.get(`${BASE_ROUTE}`, this.getResults.bind(this));
-        app.post(`${BASE_ROUTE}`, this.postResults.bind(this));
+        app.get(`${BASE_ROUTE}`, this.getLotteryResults.bind(this));
+        app.post(`${BASE_ROUTE}`, this.postLotteryResults.bind(this));
     }
 
-    async getResults(req: Request, res: Response): Promise<void> {
+    async getLotteryResults(req: Request, res: Response): Promise<void> {
         const date = req?.query?.date === 'today' ? new Date().toString() : req?.query?.date;
 
         if (typeof date === 'string' && isValidDate(new Date(date))) {
@@ -44,10 +44,10 @@ export class LotteryController {
         }
     }
 
-    async postResults(req: Request, res: Response): Promise<void> {
+    async postLotteryResults(req: Request, res: Response): Promise<void> {
         const results = req?.body?.results;
         try {
-            const newResults = await this.lotteryService.addResult(results)
+            const newResults = await this.lotteryService.addLottery(results)
             const response = this.responseHelper.buildOkResponse(newResults);
             res.status(200).json(response);
         } catch (e) {
