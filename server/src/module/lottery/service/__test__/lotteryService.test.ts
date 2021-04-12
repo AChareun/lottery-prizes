@@ -1,7 +1,7 @@
 import { LotteryService } from '../lotteryService';
-import { ILotteryRepository } from '../../repository/lotteryRepositoryInterface';
-import { Result } from '../../entity/result';
+import { ILotteryRepository } from '../../repository/iLotteryRepository';
 import { fromEntityToModel } from '../../mapper/lotteryMapper';
+import { ILotteryResult } from '../../entity/iLotteryResult';
 
 const mockRepo: ILotteryRepository = {
     addRegistry: jest.fn(),
@@ -16,32 +16,17 @@ test('Service correctly calls repository methods with the right arguments', asyn
     expect(mockRepo.getByDate).toHaveBeenCalledTimes(1);
     expect(mockRepo.getByDate).toHaveBeenCalledWith(new Date(stringDate));
 
-    const entityMock: Result = {
-        id: 1,
-        pos01: '0000',
-        pos02: '0001',
-        pos03: '0012',
-        pos04: '0123',
-        pos05: '1234',
-        pos06: null,
-        pos07: '1234',
-        pos08: '1234',
-        pos09: '1234',
-        pos10: '1234',
-        pos11: '1234',
-        pos12: '1234',
-        pos13: '1234',
-        pos14: '1234',
-        pos15: '1234',
-        pos16: '1234',
-        pos17: '1234',
-        pos18: '1234',
-        pos19: '1234',
-        pos20: '1234',
-    };
-    await testService.addResult(entityMock);
+    const lotteryMock: ILotteryResult = {
+        date: new Date(),
+        id: null,
+        name: "CIUDAD",
+        results: [],
+        type: "PRIMERA",
+        formatResults: jest.fn(),
+    }
+    await testService.addLottery(lotteryMock);
 
     expect(mockRepo.addRegistry).toHaveBeenCalledTimes(1);
-    expect(mockRepo.addRegistry).toHaveBeenCalledWith(fromEntityToModel(entityMock));
+    expect(mockRepo.addRegistry).toHaveBeenCalledWith(fromEntityToModel(lotteryMock), []);
 });
 
