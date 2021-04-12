@@ -2,12 +2,12 @@ export interface ILotteryResult {
     id: number | null;
     name: keyof typeof ELotteryNames;
     type: keyof typeof ELotteryTypes;
-    results: TResult[];
+    results: IResult[];
     date: Date;
-    formatResults(results: any): TResult[];
+    formatResults(results: any): IResult[];
 }
 
-export interface TResult {
+export interface IResult {
     position: number;
     result: string | null;
 }

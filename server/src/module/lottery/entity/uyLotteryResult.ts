@@ -1,9 +1,9 @@
-import { ELotteryNames, ELotteryTypes, ILotteryResult, TResult } from './iLotteryResult';
+import { ELotteryNames, ELotteryTypes, ILotteryResult, IResult } from './iLotteryResult';
 
 export class UyLotteryResult implements ILotteryResult {
     id: number | null;
     name: keyof typeof ELotteryNames;
-    results: TResult[];
+    results: IResult[];
     type: keyof typeof ELotteryTypes;
     date: Date;
 
@@ -21,7 +21,7 @@ export class UyLotteryResult implements ILotteryResult {
         this.results = this.formatResults(results);
     }
 
-    formatResults(results: { order: number; result: number }[]): TResult[] {
+    formatResults(results: { order: number; result: number }[]): IResult[] {
         return results.map(({ order, result }) => {
             const strResult =
                 result === null || typeof result === 'undefined'

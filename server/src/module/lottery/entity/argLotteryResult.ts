@@ -1,9 +1,9 @@
-import { ELotteryNames, ELotteryTypes, ILotteryResult, TResult } from './iLotteryResult';
+import { ELotteryNames, ELotteryTypes, ILotteryResult, IResult } from './iLotteryResult';
 
 export class ArgLotteryResult implements ILotteryResult {
     id: number | null;
     name: keyof typeof ELotteryNames;
-    results: TResult[];
+    results: IResult[];
     type: keyof typeof ELotteryTypes;
     date: Date;
 
@@ -21,15 +21,15 @@ export class ArgLotteryResult implements ILotteryResult {
         this.results = this.formatResults(results);
     }
 
-    formatResults(results: { order: number; result: number }[]): TResult[] {
-        return results.map(({ order, result }) => {
+    formatResults(results: { position: number; result: number }[]): IResult[] {
+        return results.map(({ position, result }) => {
             const strResult =
                 result === null || typeof result === 'undefined'
                     ? null
                     : String(result).padStart(4, '0');
 
             return {
-                position: order,
+                position: position,
                 result: strResult,
             };
         });
