@@ -1,8 +1,12 @@
-import { Result } from '../entity/result';
+import { ILotteryResult } from '../entity/iLotteryResult';
+import { ILotteryModelCreationAttributes } from '../model/lottery';
 import { IResultModelCreationAttributes } from '../model/result';
 
 export interface ILotteryRepository {
-    getByDate(date: Date): Promise<Result[]>;
+    getByDate(date: Date): Promise<ILotteryResult[]>;
 
-    addRegistry(attributes: IResultModelCreationAttributes): Promise<Result>;
+    addRegistry(
+        attributes: ILotteryModelCreationAttributes,
+        results: IResultModelCreationAttributes[]
+    ): Promise<ILotteryResult>;
 }

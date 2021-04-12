@@ -1,23 +1,30 @@
 import { DatabaseError, Op } from 'sequelize';
 
-import { ILotteryRepository } from '../lotteryRepositoryInterface';
-import { Result } from '../../entity/result';
-import { IResultModelCreationAttributes, ResultModel } from '../../model/result';
+import { ILotteryRepository } from '../iLotteryRepository';
 import { fromModelToEntity } from '../../mapper/lotteryMapper';
 import { ResourceNotFoundError } from '../../../error/resourceNotFoundError';
 import { GenericDatabaseError } from '../../../error/genericDatabaseError';
+import { ILotteryModelCreationAttributes, LotteryModel } from '../../model/lottery';
+import { ILotteryResult } from '../../entity/iLotteryResult';
+import { IResultModelCreationAttributes } from '../../model/result';
 
 export class LotteryRepository implements ILotteryRepository {
-    resultModel: typeof ResultModel;
+    lotteryModel: typeof LotteryModel;
 
-    constructor(resultModel: typeof ResultModel) {
-        this.resultModel = resultModel;
+    constructor(lotteryModel: typeof LotteryModel) {
+        this.lotteryModel = lotteryModel;
     }
 
-    async getByDate(date: Date): Promise<Result[]> {
-        let result: ResultModel[] | undefined;
+    async getByDate(date: Date): Promise<ILotteryResult[]> {
+        let lotteries: LotteryModel[] | undefined;
         try {
-            result = await this.resultModel.findAll();
+            lotteries = await this.lotteryModel.findAll({
+                where: {
+                    date: {
+                        [Op.eq]: date,
+                    },
+                },
+            });
         } catch (e) {
             if (e instanceof DatabaseError) {
                 console.log('DATABASE ERROR:', e.message);
@@ -28,29 +35,42 @@ export class LotteryRepository implements ILotteryRepository {
             }
         }
 
-        if (result) {
-            return result.map(fromModelToEntity);
+        if (lotteries) {
+            return await Promise.all(lotteries.map(fromModelToEntity));
         } else {
             throw new ResourceNotFoundError();
         }
     }
 
-    async addRegistry(attributes: IResultModelCreationAttributes): Promise<Result> {
-        let newResult: ResultModel | undefined;
+    async addRegistry(
+        attributes: ILotteryModelCreationAttributes,
+        results: IResultModelCreationAttributes[]
+    ): Promise<ILotteryResult> {
+        let newLottery: LotteryModel | undefined;
         try {
-            newResult = await this.resultModel.create(attributes);
+            newLottery = await this.lotteryModel.create(attributes);
+            if (newLottery) {
+                await Promise.all(
+                    results.map((r) => {
+                        const { position, result } = r;
+                        return newLottery?.createResult({position, result})
+                    })
+                );
+            }
         } catch (e) {
             if (e instanceof DatabaseError) {
                 console.log('DATABASE ERROR:', e.message);
                 console.log('SQL:', e.sql);
                 console.log('QUERY PARAMETERS:', e.parameters);
+                throw new GenericDatabaseError();
             } else {
-                throw e;
+                console.log(e);
+                throw new GenericDatabaseError();
             }
         }
 
-        if (newResult) {
-            return fromModelToEntity(newResult);
+        if (newLottery) {
+            return await fromModelToEntity(newLottery);
         } else {
             throw new GenericDatabaseError();
         }
