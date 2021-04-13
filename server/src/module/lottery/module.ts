@@ -1,14 +1,23 @@
-import { LotteryController } from "./controller/lotteryController";
-import { ResultModel } from "./model/result";
-import { LotteryRepository } from "./repository/sequelize/lotteryRepository";
-import { LotteryService } from "./service/lotteryService";
+import { LotteryController } from './controller/lotteryController';
+import { ResultModel, LotteryTypeModel, LotteryNameModel, LotteryModel } from './model';
+import { LotteryRepository } from './repository/sequelize/lotteryRepository';
+import { LotteryService } from './service/lotteryService';
 import { Application } from 'express';
 import { IDIContainer } from 'rsdi';
 
 const lotteryModuleInit = (app: Application, container: IDIContainer): void => {
-    const resultController = container.get<LotteryController>("ResultController");
+    const lotteryController = container.get<LotteryController>('LotteryController');
 
-    resultController.configureRoutes(app);
-}
+    lotteryController.configureRoutes(app);
+};
 
-export { LotteryController, LotteryService, LotteryRepository, ResultModel, lotteryModuleInit };
+export {
+    LotteryController,
+    LotteryService,
+    LotteryRepository,
+    ResultModel,
+    LotteryNameModel,
+    LotteryModel,
+    LotteryTypeModel,
+    lotteryModuleInit,
+};
