@@ -8,7 +8,9 @@
         "dev": "nodemon dist/bin/www.js",
         "test": "jest --collect-coverage",
         "test:dev": "jest --watch",
-        "db:init": "node dist/cli/init.db.js"
+        "db:init": "node dist/cli/init.db.js",
+        "db:migrations": "sequelize-cli db:migrate --config=./dist/cli/config.js --migrations-path=./dist/cli/migrations",
+        "db:seeds": "sequelize-cli db:seed:all --config=./dist/cli/config.js --seeders-path=./dist/cli/seeders"
     },
     "author": "",
     "license": "ISC",
