@@ -25,7 +25,7 @@ export async function fromModelToEntity(lotteryModel: LotteryModel): Promise<ILo
 
 export function fromEntityToModel(lotteryEntity: ILotteryResult): ILotteryModelCreationAttributes {
     return {
-        date: lotteryEntity.date,
+        date: new Date(lotteryEntity.date),
         lotteryNameId: ELotteryNames[lotteryEntity.name],
         lotteryTypeId: ELotteryTypes[lotteryEntity.type],
     };
