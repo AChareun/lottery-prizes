@@ -8,6 +8,7 @@ export const app = express();
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 const diContainer = configureDI();
 lotteryModuleInit(app, diContainer);
