@@ -79,11 +79,13 @@ export class LotteryModel
     static setupAssociations(
         lotteryNameModel: typeof LotteryNameModel,
         lotteryTypeModel: typeof LotteryTypeModel
-    ): void {
+    ): typeof LotteryModel {
         LotteryModel.belongsTo(lotteryNameModel, { foreignKey: 'lotteryNameId' });
         lotteryNameModel.hasMany(LotteryModel, { foreignKey: 'lotteryNameId' });
 
         LotteryModel.belongsTo(lotteryTypeModel, { foreignKey: 'lotteryTypeId' });
         lotteryTypeModel.hasMany(LotteryModel, { foreignKey: 'lotteryTypeId' });
+
+        return LotteryModel;
     }
 }

@@ -59,8 +59,10 @@ export class ResultModel
         return ResultModel;
     }
 
-    static setupAssociations(lotteryModel: typeof LotteryModel): void {
+    static setupAssociations(lotteryModel: typeof LotteryModel): typeof ResultModel {
         ResultModel.belongsTo(lotteryModel, { foreignKey: 'lotteryId' });
         lotteryModel.hasMany(ResultModel, { foreignKey: 'lotteryId' });
+
+        return ResultModel;
     }
 }

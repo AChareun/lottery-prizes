@@ -25,19 +25,10 @@ function addCommonDefinitions(container: DIContainer): void {
 }
 
 function configureResultModel(container: DIContainer): typeof ResultModel {
-    ResultModel.setup(container.get<Sequelize>('Sequelize'));
-    ResultModel.setupAssociations(container.get<typeof LotteryModel>('LotteryModel'));
-
-    return ResultModel;
+    return ResultModel.setup(container.get<Sequelize>('Sequelize'));
 }
 function configureLotteryModel(container: DIContainer): typeof LotteryModel {
-    LotteryModel.setup(container.get<Sequelize>('Sequelize'));
-    LotteryModel.setupAssociations(
-        container.get<typeof LotteryNameModel>('LotteryNameModel'),
-        container.get<typeof LotteryTypeModel>('LotteryTypeModel')
-    );
-
-    return LotteryModel;
+    return LotteryModel.setup(container.get<Sequelize>('Sequelize'));
 }
 function configureLotteryNameModel(container: DIContainer): typeof LotteryNameModel {
     return LotteryNameModel.setup(container.get<Sequelize>('Sequelize'));
@@ -61,11 +52,22 @@ function addLotteryModuleDefinitions(container: DIContainer): void {
     });
 }
 
+function setupAssociations(container: DIContainer) {
+    const lotteryModel = container.get<typeof LotteryModel>('LotteryModel');
+    const lotteryNameModel = container.get<typeof LotteryNameModel>('LotteryNameModel');
+    const lotteryTypeModel = container.get<typeof LotteryTypeModel>('LotteryTypeModel');
+    const resultModel = container.get<typeof ResultModel>('ResultModel');
+
+    lotteryModel.setupAssociations(lotteryNameModel, lotteryTypeModel);
+    resultModel.setupAssociations(lotteryModel);
+}
+
 export function configureDI(): DIContainer {
     const container = new DIContainer();
 
     addCommonDefinitions(container);
     addLotteryModuleDefinitions(container);
+    setupAssociations(container);
 
     return container;
 }

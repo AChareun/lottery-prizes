@@ -49,14 +49,14 @@ export class LotteryRepository implements ILotteryRepository {
         attributes: ILotteryModelCreationAttributes,
         results: IResultModelCreationAttributes[]
     ): Promise<ILotteryResult> {
-        let newLottery: LotteryModel | undefined;
+        let newLottery: LotteryModel;
         try {
             newLottery = await this.lotteryModel.create(attributes);
             if (newLottery) {
                 await Promise.all(
                     results.map((r) => {
                         const { position, result } = r;
-                        return newLottery?.createResult({position, result})
+                        return newLottery.createResult({position, result})
                     })
                 );
             }
