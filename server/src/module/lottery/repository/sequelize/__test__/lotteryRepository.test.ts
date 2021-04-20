@@ -3,11 +3,9 @@
  */
 import { Sequelize } from 'sequelize';
 import { LotteryRepository } from '../lotteryRepository';
-import { ResultModel } from '../../../model/result';
+import { ResultModel, LotteryModel, LotteryNameModel, LotteryTypeModel } from '../../../model';
 import { ResourceNotFoundError } from '../../../../error/resourceNotFoundError';
 import { GenericDatabaseError } from '../../../../error/genericDatabaseError';
-import { LotteryModel } from '../../../model/lottery';
-import { LotteryNameModel, LotteryTypeModel } from '../../../model/enum';
 import { ArgLotteryResult } from '../../../entity/argLotteryResult';
 
 const testSequelizeInstance = new Sequelize('sqlite::memory');
@@ -67,7 +65,7 @@ test('addRegistry method adds a new lottery with auto-id and associates results'
 test('Failing to add a registry throws a specific error', async () => {
     const wrongData = null;
     try {
-        // @ts-ignore
+        // @ts-ignore --> This is just to test the error throw so it's expected
         await testRepo.addRegistry(wrongData, wrongData);
     } catch (e) {
         expect(e).toBeInstanceOf(GenericDatabaseError);
@@ -75,12 +73,12 @@ test('Failing to add a registry throws a specific error', async () => {
 });
 
 test('A registry can be obtained by using getByDate method', async () => {
-    const today = new Date(new Date().toString());
-    const fakeLotteryData = { lotteryNameId: 0, lotteryTypeId: 0, date: new Date(today) };
+    const today = new Date();
+    const fakeLotteryData = { lotteryNameId: 0, lotteryTypeId: 0, date: today };
     const fakeResultData = [{ lotteryId: 10, position: 1, result: 12 }];
 
     await testRepo.addRegistry(fakeLotteryData, fakeResultData);
-    const retrievedResult = await testRepo.getByDate(new Date(today));
+    const retrievedResult = await testRepo.getByDate(today);
 
     expect(retrievedResult[0].id).toEqual(1);
 });
