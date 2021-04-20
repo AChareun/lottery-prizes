@@ -10,10 +10,8 @@ export class LotteryService {
         this.lotteryRepository = lotteryRepository;
     }
 
-    async getByDate(date: string): Promise<ILotteryResult[]> {
-        const today = new Date(date);
-
-        return await this.lotteryRepository.getByDate(today);
+    async getByDate(date: Date): Promise<ILotteryResult[]> {
+        return await this.lotteryRepository.getByDate(date);
     }
 
     async addLottery(lottery: ILotteryResult): Promise<ILotteryResult> {

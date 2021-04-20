@@ -18,10 +18,13 @@ export class LotteryRepository implements ILotteryRepository {
     async getByDate(date: Date): Promise<ILotteryResult[]> {
         let lotteries: LotteryModel[] | undefined;
         try {
+            const dateStart = new Date(date).setHours(0, 0, 0, 0);
+            const dateEnd = new Date(date).setHours(23, 59, 59, 999);
+
             lotteries = await this.lotteryModel.findAll({
                 where: {
                     date: {
-                        [Op.eq]: date,
+                        [Op.between]: [dateStart, dateEnd],
                     },
                 },
             });

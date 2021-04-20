@@ -10,11 +10,11 @@ const mockRepo: ILotteryRepository = {
 const testService: LotteryService = new LotteryService(mockRepo);
 
 test('Service correctly calls repository methods with the right arguments', async () => {
-    const stringDate = new Date().toString();
-    await testService.getByDate(stringDate);
+    const date = new Date();
+    await testService.getByDate(date);
 
     expect(mockRepo.getByDate).toHaveBeenCalledTimes(1);
-    expect(mockRepo.getByDate).toHaveBeenCalledWith(new Date(stringDate));
+    expect(mockRepo.getByDate).toHaveBeenCalledWith(date);
 
     const lotteryMock: ILotteryResult = {
         date: new Date(),

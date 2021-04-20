@@ -25,7 +25,7 @@ export class LotteryController {
 
         if (typeof date === 'string' && isValidDate(new Date(date))) {
             try {
-                const results = await this.lotteryService.getByDate(date);
+                const results = await this.lotteryService.getByDate(new Date(date));
                 const response = this.responseHelper.buildOkResponse(results)
                 res.status(200).json(response);
 

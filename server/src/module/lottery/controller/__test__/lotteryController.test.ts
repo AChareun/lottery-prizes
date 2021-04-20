@@ -34,12 +34,13 @@ beforeEach((): void => {
 });
 
 test('controller methods call the right service methods', () => {
-    const nowString = new Date().toString();
+    const today = new Date();
     // @ts-ignore
-    testController.getLotteryResults({ query: { date: nowString } }, resMock);
+    testController.getLotteryResults({ query: { date: today.toString() } }, resMock);
 
     expect(serviceMock.getByDate).toHaveBeenCalledTimes(1);
-    expect(serviceMock.getByDate).toHaveBeenCalledWith(nowString);
+    // @ts-ignore --> getByDate is a mocked fn but TS does not recognize it as that
+    expect(serviceMock.getByDate.mock.calls[0][0].getDate()).toEqual(today.getDate());
 
     const resultsMock = {};
     // @ts-ignore
@@ -50,12 +51,13 @@ test('controller methods call the right service methods', () => {
 });
 
 test("getResults calls service method with today date when query param equals 'today'", () => {
-    const today = new Date();
+    const todayDate = new Date().getDate();
     // @ts-ignore
     testController.getLotteryResults({ query: { date: 'today' } }, resMock);
 
     expect(serviceMock.getByDate).toHaveBeenCalledTimes(1);
-    expect(serviceMock.getByDate).toHaveBeenCalledWith(new Date(today).toString());
+    // @ts-ignore --> getByDate is a mocked fn but TS does not recognize it as that
+    expect(serviceMock.getByDate.mock.calls[0][0].getDate()).toEqual(todayDate);
 });
 
 test("responseHelper is called with specific error when query param is wrong", async () => {
