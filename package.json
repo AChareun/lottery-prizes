@@ -4,7 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:server": "cd server && npm start",
+    "dev:server": "cd server && npm run dev",
+    "install:client": "cd client && npm install",
+    "install:scraper": "cd scraper && npm install",
+    "install:server": "cd server && npm install",
+    "test:server": "cd server && npm run test",
+    "db:migrations": "cd server && npm run db:migrations"
   },
   "author": "achareun",
   "license": "ISC"
